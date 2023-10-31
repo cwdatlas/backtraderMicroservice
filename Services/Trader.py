@@ -10,13 +10,14 @@ import backtrader as bt
 from Analyzers.EndingValueAnalyzer import EndingValueAnalyzer as EndValueA
 from Strategies.TestStrategy import TestStrategy as TS
 from models.TestReturn import TestReturn
-
+from models.BacktradeOptimize import BacktradeOptimize
+from models.BacktradeTest import BacktradeTest
 
 class Trader:
     def __init__(self):
         self.initial_capital = 1000
 
-    def optimize_trade(self, params):
+    def optimize_trade(self, params: BacktradeOptimize):
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
@@ -54,7 +55,7 @@ class Trader:
         trade_results = TestReturn(**{"sma":maperiod, "ema":maperiod, "ending_value":round(highest_g, 2)})
         return trade_results
 
-    def backtest(self, params):
+    def backtest(self, params: BacktradeTest):
 
         # Initialize Backtrader
         cerebro = bt.Cerebro()
