@@ -1,5 +1,5 @@
 from models.BacktradeData import BacktradeData
-from dataclasses import dataclass
+from pydantic.v1.dataclasses import dataclass
 
 
 @dataclass
