@@ -16,32 +16,31 @@ class Trader:
     def __init__(self):
         self.initial_capital = 1000
 
-    def optimize_trade(self, start_date, end_date, start_sma, end_sma, start_ema, end_ema, stock_ticker, stake, algorithm, commission):
+    def optimize_trade(self, params):
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
         # Add a strategy
         cerebro.optstrategy(
             TS,
-            maperiod=range(start_sma, end_sma))
-
-        # Add Analyzer to cerebro
-        cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
+            maperiod=range(params.start_sma, params.end_sma))
 
         # Add data feed (replace with your data)
-        modpath = os.path.dirname(os.path.abspath(sys.argv[0]))
+        modpath = os.path.dirname(os.path.abspath(sys.prefix))
         datapath = os.path.join(modpath, 'PriceHistory/UEC.csv')
         print('Absolute path found by os.path.abspath: %.2f' + datapath)
         data = bt.feeds.YahooFinanceCSVData(
             dataname=datapath,
-            fromdata=datetime.datetime(2020, 1, 1),
-            todate=datetime.datetime(2023, 9, 13),
+            fromdata=datetime.datetime(params.start_date.year, params.start_date.month, params.start_date.day),
+            todate=datetime.datetime(params.end_date.year, params.end_date.month, params.end_date.day),
             reverse=False)
 
         cerebro.adddata(data)
         cerebro.broker.setcash(self.initial_capital)
-        cerebro.broker.setcommission(commission=0.000)
-        cerebro.addsizer(bt.sizers.FixedSize, stake=10)
+        cerebro.broker.setcommission(commission=params.commission)
+        cerebro.addsizer(bt.sizers.FixedSize, stake=params.stake)
+        # Add Analyzer to cerebro
+        cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
 
         # Run Backtest
         results = cerebro.run()
@@ -52,10 +51,10 @@ class Trader:
             if i[0].analyzers[0].ending_value > highest_g:
                 highest_g = i[0].analyzers[0].ending_value
                 maperiod = i[0].params.maperiod
-        trade_results = TestReturn(maperiod, maperiod, round(highest_g, 2))
+        trade_results = TestReturn(**{"sma":maperiod, "ema":maperiod, "ending_value":round(highest_g, 2)})
         return trade_results
 
-    def backtest(self, start_date, end_date, sma, ema, stock_ticker, stake, algorithm, commission):
+    def backtest(self, params):
 
         # Initialize Backtrader
         cerebro = bt.Cerebro()
@@ -63,28 +62,28 @@ class Trader:
         # Add a strategy
         cerebro.addstrategy(
             TS,
-            maperiod=sma)
+            maperiod=params.sma)
 
         # Add Analyzer to cerebro
         cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
 
         # Add data feed (replace with your data)
-        modpath = os.path.dirname(os.path.abspath(sys.argv[0]))
+        modpath = os.path.dirname(os.path.abspath(sys.prefix))
         datapath = os.path.join(modpath, 'PriceHistory/UEC.csv')
         print('Absolute path found by os.path.abspath: %.2f' + datapath)
         data = bt.feeds.YahooFinanceCSVData(
             dataname=datapath,
-            fromdata=datetime.datetime(2020, 1, 1),
-            todate=datetime.datetime(2023, 9, 13),
+            fromdata=datetime.datetime(params.start_date.year, params.start_date.month, params.start_date.day),
+            todate=datetime.datetime(params.end_date.year, params.end_date.month, params.end_date.day),
             reverse=False)
 
         cerebro.adddata(data)
         cerebro.broker.setcash(self.initial_capital)
-        cerebro.broker.setcommission(commission=0.000)
-        cerebro.addsizer(bt.sizers.FixedSize, stake=10)
+        cerebro.broker.setcommission(commission=params.commission)
+        cerebro.addsizer(bt.sizers.FixedSize, stake=params.stake)
 
         # Run Backtest
         results = cerebro.run()
-        trade_results = TestReturn(results[0].params.maperiod, results[0].params.maperiod,
-                                   round(results[0].analyzers[0].ending_value, 2))
+        trade_results = TestReturn(**{"sma" : results[0].params.maperiod, "ema": results[0].params.maperiod,
+                                      "ending_value": round(results[0].analyzers[0].ending_value, 2)})
         return trade_results
