@@ -30,7 +30,7 @@ def optimize():
     if optimization.end_ema <= optimization.start_ema:
         return handle_bad_request(f"optimize: user gave improper start and end ema data: {str(optimization.end_ema)} {str(optimization.start_ema)}")
     trader = Trader()
-    results = TestReturn(**{"ending_value": 1000, "ema": 20, "sma": 27})
+    results = trader.optimize_trade(optimization)
     logger.debug(f"Optimize: returned successful Optimization: {str(results)}")
     return json.dumps(results.__dict__)
 
@@ -46,7 +46,7 @@ def backtrade():
 
     # validating that data is expected TODO test more complex validation
     trader = Trader()
-    results = TestReturn(**{"ending_value": 1000, "ema": 20, "sma": 27})
+    results = trader.backtest(test)
     logger.debug(f"backtrade: returned successful Optimization: {str(results)}")
     return json.dumps(results.__dict__)
 
