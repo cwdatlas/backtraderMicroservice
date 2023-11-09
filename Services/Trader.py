@@ -4,14 +4,15 @@ from __future__ import (absolute_import, division, print_function,
 import datetime  # For datetime objects
 import os.path  # To manage paths
 import sys  # To find out the script name (in argv[0])
+import Strategies
 
 import backtrader as bt
 
 from Analyzers.EndingValueAnalyzer import EndingValueAnalyzer as EndValueA
-from Strategies.TestStrategy import TestStrategy as TS
 from models.TestReturn import TestReturn
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
+
 
 class Trader:
     def __init__(self):
@@ -21,10 +22,12 @@ class Trader:
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
+        strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
         # Add a strategy
         cerebro.optstrategy(
-            TS,
-            maperiod=range(params.start_sma, params.end_sma))
+            strategy_class,
+            sma=range(params.start_sma, params.end_sma),
+            ema=range(params.start_ema, params.end_ema))
 
         # Add data feed (replace with your data)
         modpath = os.path.dirname(os.path.abspath(sys.prefix))
@@ -46,13 +49,15 @@ class Trader:
         # Run Backtest
         results = cerebro.run()
 
-        maperiod = 0
+        sma = 0
+        ema = 0
         highest_g = 0
         for i in results:
             if i[0].analyzers[0].ending_value > highest_g:
                 highest_g = i[0].analyzers[0].ending_value
-                maperiod = i[0].params.maperiod
-        trade_results = TestReturn(**{"sma":maperiod, "ema":maperiod, "ending_value":round(highest_g, 2)})
+                sma = i[0].params.sma
+                ema = i[0].params.ema
+        trade_results = TestReturn(**{"sma": sma, "ema": ema, "ending_value": round(highest_g, 2)})
         return trade_results
 
     def backtest(self, params: BacktradeTest):
@@ -60,10 +65,13 @@ class Trader:
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
+        strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
         # Add a strategy
         cerebro.addstrategy(
-            TS,
-            maperiod=params.sma)
+            strategy_class,
+            sma=params.sma,
+            ema=params.ema
+        )
 
         # Add Analyzer to cerebro
         cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
@@ -85,6 +93,6 @@ class Trader:
 
         # Run Backtest
         results = cerebro.run()
-        trade_results = TestReturn(**{"sma" : results[0].params.maperiod, "ema": results[0].params.maperiod,
+        trade_results = TestReturn(**{"sma": results[0].params.sma, "ema": results[0].params.ema,
                                       "ending_value": round(results[0].analyzers[0].ending_value, 2)})
         return trade_results
