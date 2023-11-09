@@ -1,23 +1,29 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+
+# Create a Strategy
 # Import the backtrader platform
 import backtrader as bt
 
 
 # Create a Stratey
-class ProvenStrategy(bt.Strategy):
+class EmaSmaCross(bt.Strategy):
     params = (
-        ('maperiod', 15),
+        ('sma', 30),
+        ('ema', 15),
+        ('printlog', False)
     )
 
-    def log(self, txt, dt=None):
+    def log(self, txt, dt=None, doprint=False):
         ''' Logging function fot this strategy'''
-        dt = dt or self.datas[0].datetime.date(0)
-        print('%s, %s' % (dt.isoformat(), txt))
+        if self.params.printlog or doprint:
+            dt = dt or self.datas[0].datetime.date(0)
+            print('%s, %s' % (dt.isoformat(), txt))
 
     def __init__(self):
         # Keep a reference to the "close" line in the data[0] dataseries
+        self.ending_value = None
         self.dataclose = self.datas[0].close
 
         # To keep track of pending orders and buy price/commission
@@ -27,7 +33,10 @@ class ProvenStrategy(bt.Strategy):
 
         # Add a MovingAverageSimple indicator
         self.sma = bt.indicators.MovingAverageSimple(
-            self.datas[0], period=self.params.maperiod)
+            self.datas[0], period=self.params.sma)
+        # Add a ExponentialMovingAverage indicator
+        self.ema = bt.indicators.ExponentialMovingAverage(
+            self.datas[0], period=self.params.ema)
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -57,6 +66,7 @@ class ProvenStrategy(bt.Strategy):
         elif order.status in [order.Canceled, order.Margin, order.Rejected]:
             self.log('Order Canceled/Margin/Rejected')
 
+        # Write down: no pending order
         self.order = None
 
     def notify_trade(self, trade):
@@ -78,7 +88,7 @@ class ProvenStrategy(bt.Strategy):
         if not self.position:
 
             # Not yet ... we MIGHT BUY if ...
-            if self.dataclose[0] > self.sma[0]:
+            if self.ema[0] > self.sma[0]:
 
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
@@ -88,9 +98,14 @@ class ProvenStrategy(bt.Strategy):
 
         else:
 
-            if self.dataclose[0] < self.sma[0]:
+            if self.ema[0] < self.sma[0]:
                 # SELL, SELL, SELL!!! (with all possible default parameters)
                 self.log('SELL CREATE, %.2f' % self.dataclose[0])
 
                 # Keep track of the created order to avoid a 2nd order
                 self.order = self.sell()
+
+    def stop(self):
+        self.log('(SMA %2d) Ending Value %.2f' %
+                 (self.params.sma, self.broker.getvalue()), doprint=True)
+        self.final_value = self.broker.getvalue()  # Store the final portfolio value when the strategy stops
