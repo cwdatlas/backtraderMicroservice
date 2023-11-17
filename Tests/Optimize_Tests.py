@@ -2,6 +2,7 @@ import logging
 
 from pydantic import ValidationError
 
+from Errors.BacktradeInputErrors import BacktradeInputErrors
 from Services.Trader import Trader
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
@@ -25,7 +26,7 @@ def test_optimize_expected():
 
     try:
         test = BacktradeOptimize(**data)
-    except ValidationError as e:
+    except BacktradeInputErrors as e:
         test = None
         print(e)
     # after this point is the actual test, what is before is assumed to work
@@ -49,7 +50,7 @@ def test_optimize_expected_ee():
     }
     try:
         test = BacktradeOptimize(**data)
-    except ValidationError as e:
+    except BacktradeInputErrors as e:
         test = None
         assert e  # after this point is the actual test, what is before is assumed to work
     trader = Trader()
@@ -72,7 +73,7 @@ def test_optimize_expected_ss():
     }
     try:
         test = BacktradeOptimize(**data)
-    except ValidationError as e:
+    except BacktradeInputErrors as e:
         test = None
         assert e  # after this point is the actual test, what is before is assumed to work
     trader = Trader()
@@ -95,7 +96,7 @@ def test_optimize_expected_low():
     }
     try:
         test = BacktradeOptimize(**data)
-    except ValidationError as e:
+    except BacktradeInputErrors as e:
         test = None
         assert e  # after this point is the actual test, what is before is assumed to work
     trader = Trader()
@@ -118,7 +119,7 @@ def test_optimize_expected_high():
     }
     try:
         test = BacktradeOptimize(**data)
-    except ValidationError as e:
+    except BacktradeInputErrors as e:
         test = None
         assert e  # after this point is the actual test, what is before is assumed to work
     trader = Trader()
@@ -140,7 +141,7 @@ def test_optimize_crappy_dates_equal():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -164,7 +165,7 @@ def test_otpimize_crappy_date_oposite():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -188,7 +189,7 @@ def test_optimize_crappy_sma_out_of_bounds_up():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -212,7 +213,7 @@ def test_optimize_crappy_sma_out_of_bounds_down():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -236,7 +237,7 @@ def test_optimize_crappy_ema_out_of_bounds_up():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -260,7 +261,7 @@ def test_optimize_crappy_ema_out_of_bounds_down():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -284,7 +285,7 @@ def test_optimize_crappy_stake_out_of_bounds_up():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -308,7 +309,7 @@ def test_optimize_crappy_stake_out_of_bounds_down():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -332,7 +333,7 @@ def test_optimize_crappy_commission_out_of_bounds_up():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
@@ -356,7 +357,7 @@ def test_optimize_crappy_commission_out_of_bounds_down():
     }
     try:
         test = BacktradeOptimize(**data)
-    except TypeError as e:
+    except BacktradeInputErrors as e:
         test = None
     assert test is None
     # after this point is the actual test, what is before is assumed to work
