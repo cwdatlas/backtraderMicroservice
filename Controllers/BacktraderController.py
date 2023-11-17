@@ -5,6 +5,7 @@ from flask import Flask
 from flask import request
 from pydantic.v1.error_wrappers import ValidationError
 
+from Errors.BacktradInputErrors import BacktradInputErrors
 from Services.Trader import Trader as Trader
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
@@ -55,36 +56,43 @@ def backtrade():
 
 @btrader.errorhandler(ValidationError)
 def handle_bad_request(e):
-    logger.exception("handle_bad_request: " + str(e))
+    logger.exception("handle_bad_request: " + str(e.args))
     return json.dumps(
-        {"error": "Bad Request", "message": "inadequate or invalid data given. Make sure you have given " +
-                                            "all required valid variables"}), 400
+        {"error": "Bad Request", "message": e.args[0]}), 400
+
+
+@btrader.errorhandler(BacktradInputErrors)
+def handle_backtrade_error(e):
+    logger.exception("handle_backtrade_request" + str(e))
+    return json.dumps(
+        {"error": "Bad Data", "Message": str(e.args[0])}
+    )
 
 
 @btrader.errorhandler(ValueError)
 def handle_value_error(e):
-    logger.exception("handle_value_error: " + str(e))
+    logger.exception("handle_value_error: ")
     return json.dumps(
         {"error": "Bad Request", "message": "Make sure your dates and other params are accurate"}), 400
 
 
 @btrader.errorhandler(AttributeError)
 def handle_attribute_error(e):
-    logger.exception("handle_attribute_error: " + str(e))
+    logger.exception("handle_attribute_error: " + str(e.args))
     return json.dumps(
         {"error": "Bad Request", "message": "Make sure your algorithm that you are using is correct"}), 400
 
 
 @btrader.errorhandler(TypeError)
 def handle_type_error(e):
-    logger.exception("handle_type_error: " + str(e))
+    logger.exception("handle_type_error: " + str(e.args))
     return json.dumps(
         {"error": "Bad Request", "message": "Internal Error"}), 500
 
 
 @btrader.errorhandler(Exception)
 def handle_unexpected_exception(e):
-    logger.exception("handle_unexpected_exception: s" + str(e))
+    logger.exception("handle_unexpected_exception: s" + str(e.args))
     return json.dumps({"error": "Unexpected Error", "message": "An unexpected error occurred"}), 500
 
 
