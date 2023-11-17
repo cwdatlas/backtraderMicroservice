@@ -1,0 +1,2 @@
+class BacktradeInputErrors(Exception):
+    pass
