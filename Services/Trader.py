@@ -19,6 +19,8 @@ class Trader:
         self.initial_capital = 1000
 
     def optimize_trade(self, params: BacktradeOptimize):
+        if params is None:
+            return None
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
@@ -61,7 +63,8 @@ class Trader:
         return trade_results
 
     def backtest(self, params: BacktradeTest):
-
+        if params is None:
+            return None
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
