@@ -1,7 +1,6 @@
 import json
 import logging
 
-import werkzeug
 from flask import Flask
 from flask import request
 from pydantic.v1.error_wrappers import ValidationError
@@ -9,7 +8,6 @@ from pydantic.v1.error_wrappers import ValidationError
 from Services.Trader import Trader as Trader
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
-from models.TestReturn import TestReturn
 
 btrader = Flask(__name__)
 logger = logging.getLogger('backtrade_logger')
@@ -23,7 +21,6 @@ def optimize():
     try:
         optimization = BacktradeOptimize(**request.get_json())
     except TypeError as e:
-        print(f"Hey this is the error: {e}")
         return handle_bad_request(e)
 
     # validating that data is expected TODO test more complex validation
@@ -58,7 +55,7 @@ def backtrade():
 
 @btrader.errorhandler(ValidationError)
 def handle_bad_request(e):
-    logger.exception(e)
+    logger.exception("handle_bad_request: " + str(e))
     return json.dumps(
         {"error": "Bad Request", "message": "inadequate or invalid data given. Make sure you have given " +
                                             "all required valid variables"}), 400
@@ -66,28 +63,28 @@ def handle_bad_request(e):
 
 @btrader.errorhandler(ValueError)
 def handle_value_error(e):
-    logger.exception(e)
+    logger.exception("handle_value_error: " + str(e))
     return json.dumps(
         {"error": "Bad Request", "message": "Make sure your dates and other params are accurate"}), 400
 
 
 @btrader.errorhandler(AttributeError)
 def handle_attribute_error(e):
-    logger.exception(e)
+    logger.exception("handle_attribute_error: " + str(e))
     return json.dumps(
         {"error": "Bad Request", "message": "Make sure your algorithm that you are using is correct"}), 400
 
 
 @btrader.errorhandler(TypeError)
 def handle_type_error(e):
-    logger.exception(e)
+    logger.exception("handle_type_error: " + str(e))
     return json.dumps(
         {"error": "Bad Request", "message": "Internal Error"}), 500
 
 
 @btrader.errorhandler(Exception)
 def handle_unexpected_exception(e):
-    logger.exception(e)
+    logger.exception("handle_unexpected_exception: s" + str(e))
     return json.dumps({"error": "Unexpected Error", "message": "An unexpected error occurred"}), 500
 
 
