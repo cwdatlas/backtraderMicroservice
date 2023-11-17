@@ -5,7 +5,7 @@ from flask import Flask
 from flask import request
 from pydantic.v1.error_wrappers import ValidationError
 
-from Errors.BacktradInputErrors import BacktradInputErrors
+from Errors.BacktradeInputErrors import BacktradeInputErrors
 from Services.Trader import Trader as Trader
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
@@ -61,7 +61,7 @@ def handle_bad_request(e):
         {"error": "Bad Request", "message": e.args[0]}), 400
 
 
-@btrader.errorhandler(BacktradInputErrors)
+@btrader.errorhandler(BacktradeInputErrors)
 def handle_backtrade_error(e):
     logger.exception("handle_backtrade_request" + str(e))
     return json.dumps(
