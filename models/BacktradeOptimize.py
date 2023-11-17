@@ -1,4 +1,5 @@
 from pydantic import model_validator
+
 from Errors.MetricOutOfVoundsError import MetricOutOfBoundsError
 from models.BacktradeData import BacktradeData
 

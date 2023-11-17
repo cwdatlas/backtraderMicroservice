@@ -5,11 +5,18 @@ from pydantic import ValidationError
 from Errors.BacktradeInputErrors import BacktradeInputErrors
 from Services.Trader import Trader
 from models.BacktradeOptimize import BacktradeOptimize
-from models.BacktradeTest import BacktradeTest
 
 logger = logging.getLogger('unit_test_logger')
+"""
+Any test with the word expected in the name contains data that should result in a successful operation
+Any test with crappy in the name has invalid data in the json formatted string, and should result in an exception 
+    when creating the backtrade type data type
+Any test with crazy in the name has as wrong of data as possible given to the respective datatype, and should result in
+    a None
+"""
 
 
+# Expected operation, containing data that should be valid
 def test_optimize_expected():
     data = {
         "start_date": "2010-01-01",
@@ -35,6 +42,7 @@ def test_optimize_expected():
     assert results.ending_value > 0
 
 
+# Expected operation specifically with the EmaEmaCross algorithm, containing data that should be valid
 def test_optimize_expected_ee():
     data = {
         "start_date": "2010-01-01",
@@ -58,6 +66,7 @@ def test_optimize_expected_ee():
     assert results.ending_value > 0
 
 
+# Expected operation specifically with the SmaSmaCross algorithm, containing data that should be valid
 def test_optimize_expected_ss():
     data = {
         "start_date": "2010-01-01",
@@ -81,6 +90,7 @@ def test_optimize_expected_ss():
     assert results.ending_value > 0
 
 
+# Expected operation with low expected values, containing data that should be valid
 def test_optimize_expected_low():
     data = {
         "start_date": "2010-01-01",
@@ -104,6 +114,7 @@ def test_optimize_expected_low():
     assert results.ending_value > 0
 
 
+# Expected operation with high expected values, containing data that should be valid
 def test_optimize_expected_high():
     data = {
         "start_date": "2010-01-01",
@@ -126,6 +137,8 @@ def test_optimize_expected_high():
     results = trader.optimize_trade(test)
     assert results.ending_value > 0
 
+
+# Expected operation with high expected values, containing data that should be valid
 def test_optimize_crappy_dates_equal():
     data = {
         "start_date": "2009-01-01",
@@ -150,6 +163,7 @@ def test_optimize_crappy_dates_equal():
     assert results is None
 
 
+# Operation with equal dates, containing data that should not be valid
 def test_otpimize_crappy_date_oposite():
     data = {
         "start_date": "2022-01-01",
@@ -174,6 +188,7 @@ def test_otpimize_crappy_date_oposite():
     assert results is None
 
 
+# Operation: out of bounds sma, over 100, containing data that should not be valid
 def test_optimize_crappy_sma_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -198,6 +213,7 @@ def test_optimize_crappy_sma_out_of_bounds_up():
     assert results is None
 
 
+# Operation: out of bounds sma, below 1, containing data that should not be valid
 def test_optimize_crappy_sma_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -222,6 +238,7 @@ def test_optimize_crappy_sma_out_of_bounds_down():
     assert results is None
 
 
+# Operation: out of bounds ema, over 100, containing data that should not be valid
 def test_optimize_crappy_ema_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -246,6 +263,7 @@ def test_optimize_crappy_ema_out_of_bounds_up():
     assert results is None
 
 
+# Operation: out of bounds ema, below 1, containing data that should not be valid
 def test_optimize_crappy_ema_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -270,6 +288,7 @@ def test_optimize_crappy_ema_out_of_bounds_down():
     assert results is None
 
 
+# Operation: out of bounds stake, over 100, containing data that should not be valid
 def test_optimize_crappy_stake_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -294,6 +313,7 @@ def test_optimize_crappy_stake_out_of_bounds_up():
     assert results is None
 
 
+# Operation: out of bounds stake, below 0, containing data that should not be valid
 def test_optimize_crappy_stake_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -318,6 +338,7 @@ def test_optimize_crappy_stake_out_of_bounds_down():
     assert results is None
 
 
+# Operation: out of bounds stake, over 1, containing data that should not be valid
 def test_optimize_crappy_commission_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -342,6 +363,7 @@ def test_optimize_crappy_commission_out_of_bounds_up():
     assert results is None
 
 
+# Operation: out of bounds commission, below 0, containing data that should not be valid
 def test_optimize_crappy_commission_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -366,6 +388,7 @@ def test_optimize_crappy_commission_out_of_bounds_down():
     assert results is None
 
 
+# Operation: invalid dates, containing data that should not be valid
 def test_optimize_crazy_dates():
     data = {
         "start_date": "ajsfk;dhhhhhhhhhaskdjf",
@@ -390,6 +413,7 @@ def test_optimize_crazy_dates():
     assert results is None
 
 
+# Operation: inputs are None, containing data that should not be valid
 def test_optimize_crazy_none():
     data = {
         "start_date": "None",
@@ -414,6 +438,7 @@ def test_optimize_crazy_none():
     assert results is None
 
 
+# Operation: inputs are blank strings, containing data that should not be valid
 def test_optimize_crazy_blank():
     data = {
         "start_date": "",
@@ -438,6 +463,7 @@ def test_optimize_crazy_blank():
     assert results is None
 
 
+# Operation: inputs are empty strings and wrong json, containing data that should not be valid
 def test_optimize_crazy_incorrect_json():
     data = {
         "start_date": "",
@@ -446,8 +472,8 @@ def test_optimize_crazy_incorrect_json():
         "algorithm": "",
         "commission": "",
         "stake": "",
-        "sma": "10",
-        "ema": "10"
+        "sma": "",
+        "ema": ""
     }
     try:
         test = BacktradeOptimize(**data)

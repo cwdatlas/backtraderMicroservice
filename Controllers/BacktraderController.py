@@ -65,29 +65,28 @@ def handle_bad_request(e):
 def handle_backtrade_error(e):
     logger.exception("handle_backtrade_request" + str(e))
     return json.dumps(
-        {"error": "Bad Data", "Message": str(e.args[0])}
-    )
+        {"error": "Bad Data", "Message": str(e.args[0])}), 400
 
 
 @btrader.errorhandler(ValueError)
 def handle_value_error(e):
-    logger.exception("handle_value_error: ")
+    logger.error(f"handle_value_error: '{str(e)}")
     return json.dumps(
-        {"error": "Bad Request", "message": "Make sure your dates and other params are accurate"}), 400
+        {"error": "Bad Request", "message": "Make sure all given parameters are accurate to the standard"}), 400
 
 
 @btrader.errorhandler(AttributeError)
 def handle_attribute_error(e):
     logger.exception("handle_attribute_error: " + str(e.args))
     return json.dumps(
-        {"error": "Bad Request", "message": "Make sure your algorithm that you are using is correct"}), 400
+        {"error": "Internal Error", "message": "Internal error"}), 500
 
 
 @btrader.errorhandler(TypeError)
 def handle_type_error(e):
     logger.exception("handle_type_error: " + str(e.args))
     return json.dumps(
-        {"error": "Bad Request", "message": "Internal Error"}), 500
+        {"error": "Internal Error", "message": "Internal Error"}), 500
 
 
 @btrader.errorhandler(Exception)

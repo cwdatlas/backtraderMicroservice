@@ -4,14 +4,14 @@ from __future__ import (absolute_import, division, print_function,
 import datetime  # For datetime objects
 import os.path  # To manage paths
 import sys  # To find out the script name (in argv[0])
-import Strategies
 
 import backtrader as bt
 
+import Strategies
 from Analyzers.EndingValueAnalyzer import EndingValueAnalyzer as EndValueA
-from models.TestReturn import TestReturn
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
+from models.TestReturn import TestReturn
 
 
 class Trader:

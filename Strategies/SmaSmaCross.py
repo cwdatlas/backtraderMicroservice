@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-
 # Create a Strategy
 # Import the backtrader platform
 import backtrader as bt
