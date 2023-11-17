@@ -1,5 +1,5 @@
 from pydantic import model_validator
-
+from Errors.MetricOutOfVoundsError import MetricOutOfBoundsError
 from models.BacktradeData import BacktradeData
 
 
@@ -17,24 +17,24 @@ class BacktradeOptimize(BacktradeData):
         end_ema = self.end_ema
 
         if start_sma <= 0:
-            raise TypeError('Starting SMA is 0 or lower, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Starting SMA is 0 or lower, must be more than 0 and less than 101')
         if start_ema <= 0:
-            raise TypeError('Starting EMA is 0 or lower, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Starting EMA is 0 or lower, must be more than 0 and less than 101')
         if start_sma > 100:
-            raise TypeError('Starting SMA is 101 or higher, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Starting SMA is 101 or higher, must be more than 0 and less than 101')
         if start_ema > 100:
-            raise TypeError('Starting EMA is 101 or higher, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Starting EMA is 101 or higher, must be more than 0 and less than 101')
 
         if end_sma <= 0:
-            raise TypeError('Ending SMA is 0 or lower, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Ending SMA is 0 or lower, must be more than 0 and less than 101')
         if end_ema <= 0:
-            raise TypeError('Ending EMA is 0 or lower, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Ending EMA is 0 or lower, must be more than 0 and less than 101')
         if end_sma > 100:
-            raise TypeError('Ending SMA is 101 or higher, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Ending SMA is 101 or higher, must be more than 0 and less than 101')
         if end_ema > 100:
-            raise TypeError('Ending EMA is 101 or higher, must be more than 0 and less than 101')
+            raise MetricOutOfBoundsError('Ending EMA is 101 or higher, must be more than 0 and less than 101')
 
         if start_sma >= end_sma:
-            raise TypeError('Starting SMA is larger or equal to ending SMA')
+            raise MetricOutOfBoundsError('Starting SMA is larger or equal to ending SMA')
         if start_ema >= end_ema:
-            raise TypeError('Starting EMA is larger or equal to ending EMA')
+            raise MetricOutOfBoundsError('Starting EMA is larger or equal to ending EMA')
