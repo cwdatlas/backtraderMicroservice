@@ -1,0 +1,2 @@
+class BacktradInputErrors(Exception):
+    pass

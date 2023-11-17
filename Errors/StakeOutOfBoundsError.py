@@ -1,5 +1,5 @@
-import BacktradingErrors
+from Errors.BacktradInputErrors import BacktradInputErrors
 
 
-class StakeOutOfBoundsError(BacktradingErrors):
+class StakeOutOfBoundsError(BacktradInputErrors):
     pass

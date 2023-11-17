@@ -1,5 +1,5 @@
-import BacktradingErrors
+from Errors.BacktradInputErrors import BacktradInputErrors
 
 
-class CommissionOutOfBoundsError(BacktradingErrors):
+class CommissionOutOfBoundsError(BacktradInputErrors):
     pass

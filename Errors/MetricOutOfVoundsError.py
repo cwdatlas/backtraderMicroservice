@@ -1,6 +1,6 @@
-import BacktradingErrors
+from Errors.BacktradInputErrors import BacktradInputErrors
 
 
-class MetricOutOfBoundsError(BacktradingErrors):
+class MetricOutOfBoundsError(BacktradInputErrors):
     pass
 

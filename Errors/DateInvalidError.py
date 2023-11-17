@@ -1,5 +1,5 @@
-import BacktradingErrors
+from Errors.BacktradInputErrors import BacktradInputErrors
 
 
-class DateInvalidError(BacktradingErrors):
+class DateInvalidError(BacktradInputErrors):
     pass
