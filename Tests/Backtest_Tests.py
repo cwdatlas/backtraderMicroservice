@@ -8,7 +8,16 @@ from models.BacktradeTest import BacktradeTest
 
 logger = logging.getLogger('unit_test_logger')
 
+"""
+Any test with the word expected in the name contains data that should result in a successful operation
+Any test with crappy in the name has invalid data in the json formatted string, and should result in an exception 
+    when creating the backtrade type data type
+Any test with crazy in the name has as wrong of data as possible given to the respective datatype, and should result in
+    a None
+"""
 
+
+# Expected operation, containing data that should be valid
 def test_backtrade_expected():
     data = {
         "start_date": "2010-01-01",
@@ -32,6 +41,7 @@ def test_backtrade_expected():
     assert results.ending_value > 0
 
 
+# Expected operation specifically with the EmaEmaCross algorithm, containing data that should be valid
 def test_backtrade_expected_ee():
     data = {
         "start_date": "2010-01-01",
@@ -55,6 +65,7 @@ def test_backtrade_expected_ee():
     assert results.ending_value > 0
 
 
+# Expected operation specifically with the SmaSmaCross algorithm, containing data that should be valid
 def test_backtrade_expected_ss():
     data = {
         "start_date": "2010-01-01",
@@ -78,6 +89,7 @@ def test_backtrade_expected_ss():
     assert results.ending_value > 0
 
 
+# Expected operation with the lowest expected inputs, containing data that should be valid
 def test_backtrade_expected_low():
     data = {
         "start_date": "2010-01-01",
@@ -101,6 +113,7 @@ def test_backtrade_expected_low():
     assert results.ending_value == 1000
 
 
+# Expected operation with the highest expected inputs, containing data that should be valid
 def test_backtrade_expected_high():
     data = {
         "start_date": "2010-01-01",
@@ -125,7 +138,7 @@ def test_backtrade_expected_high():
     assert results.ending_value > 0
 
 
-
+# Expected operation containing invalid same dates, containing data that should be not valid
 def test_backtrade_crappy_dates_equal():
     data = {
         "start_date": "2009-01-01",
@@ -148,6 +161,7 @@ def test_backtrade_crappy_dates_equal():
     assert results is None
 
 
+# Expected operation containing invalid swapped dates, containing data that should be not valid
 def test_backtrade_crappy_date_oposite():
     data = {
         "start_date": "2022-01-01",
@@ -170,6 +184,7 @@ def test_backtrade_crappy_date_oposite():
     assert results is None
 
 
+# Expected operation containing out of bounds sma, over 100, containing data that should be not valid
 def test_backtrade_crappy_sma_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -192,6 +207,7 @@ def test_backtrade_crappy_sma_out_of_bounds_up():
     assert results is None
 
 
+# Expected operation containing out of bounds sma, below 1, containing data that should be not valid
 def test_backtrade_crappy_sma_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -214,29 +230,8 @@ def test_backtrade_crappy_sma_out_of_bounds_down():
     assert results is None
 
 
+# Expected operation containing out of bounds ema, over 100, containing data that should be not valid
 def test_backtrade_crappy_ema_out_of_bounds_up():
-    data = {
-        "start_date": "2009-01-01",
-        "end_date": "2010-01-01",
-        "stock_ticker": "UEC",
-        "algorithm": "SmaSmaCross",
-        "commission": ".01",
-        "stake": "1",
-        "sma": "10",
-        "ema": "-1"
-    }
-    try:
-        test = BacktradeTest(**data)
-    except BacktradeInputErrors as e:
-        test = None
-    assert test is None
-    # after this point is the actual test, what is before is assumed to work
-    trader = Trader()
-    results = trader.backtest(test)
-    assert results is None
-
-
-def test_backtrade_crappy_ema_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -258,6 +253,30 @@ def test_backtrade_crappy_ema_out_of_bounds_down():
     assert results is None
 
 
+# Expected operation containing out of bounds ema, below 1, containing data that should be not valid
+def test_backtrade_crappy_ema_out_of_bounds_down():
+    data = {
+        "start_date": "2009-01-01",
+        "end_date": "2010-01-01",
+        "stock_ticker": "UEC",
+        "algorithm": "SmaSmaCross",
+        "commission": ".01",
+        "stake": "1",
+        "sma": "10",
+        "ema": "-1"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except BacktradeInputErrors as e:
+        test = None
+    assert test is None
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results is None
+
+
+# Expected operation containing out of bounds stake, over 100, containing data that should be not valid
 def test_backtrade_crappy_stake_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -280,6 +299,7 @@ def test_backtrade_crappy_stake_out_of_bounds_up():
     assert results is None
 
 
+# Expected operation containing out of bounds stake, below 0, containing data that should be not valid
 def test_backtrade_crappy_stake_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -302,6 +322,7 @@ def test_backtrade_crappy_stake_out_of_bounds_down():
     assert results is None
 
 
+# Expected operation containing out of bounds commission, over 1, containing data that should be not valid
 def test_backtrade_crappy_commission_out_of_bounds_up():
     data = {
         "start_date": "2009-01-01",
@@ -324,6 +345,7 @@ def test_backtrade_crappy_commission_out_of_bounds_up():
     assert results is None
 
 
+# Expected operation containing out of bounds commission, below 0, containing data that should be not valid
 def test_backtrade_crappy_commission_out_of_bounds_down():
     data = {
         "start_date": "2009-01-01",
@@ -346,6 +368,7 @@ def test_backtrade_crappy_commission_out_of_bounds_down():
     assert results is None
 
 
+# Expected operation containing invalid dates, containing data that should be not valid
 def test_backtrade_crazy_dates():
     data = {
         "start_date": "ajsfk;dhhhhhhhhhaskdjf",
@@ -368,6 +391,7 @@ def test_backtrade_crazy_dates():
     assert results is None
 
 
+# Expected operation containing None for all values and incorrect json, containing data that should be not valid
 def test_backtrade_crazy_none():
     data = {
         "start_date": "None",
@@ -376,8 +400,8 @@ def test_backtrade_crazy_none():
         "algorithm": "None",
         "commission": "None",
         "stake": "None",
-        "sma": "10",
-        "ema": "10"
+        "sma": "None",
+        "ema": "None"
     }
     try:
         test = BacktradeTest(**data)
@@ -390,29 +414,8 @@ def test_backtrade_crazy_none():
     assert results is None
 
 
+# Expected operation containing empty strings for all values, containing data that should be not valid
 def test_backtrade_crazy_blank():
-    data = {
-        "start_date": "",
-        "end_date": "",
-        "stock_ticker": "",
-        "algorithm": "",
-        "commission": "",
-        "stake": "",
-        "sma": "10",
-        "ema": "10"
-    }
-    try:
-        test = BacktradeTest(**data)
-    except ValidationError as e:
-        test = None
-    assert test is None
-    # after this point is the actual test, what is before is assumed to work
-    trader = Trader()
-    results = trader.backtest(test)
-    assert results is None
-
-
-def test_backtrade_crazy_incorrect_json():
     data = {
         "start_date": "",
         "end_date": "",
@@ -424,6 +427,29 @@ def test_backtrade_crazy_incorrect_json():
         "end_sma": "",
         "start_ema": "",
         "end_ema": ""
+    }
+    try:
+        test = BacktradeTest(**data)
+    except ValidationError as e:
+        test = None
+    assert test is None
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results is None
+
+
+# Expected operation containing empty strings for all values with incorrect json, containing data that should be not valid
+def test_backtrade_crazy_incorrect_json():
+    data = {
+        "start_date": "",
+        "end_date": "",
+        "stock_ticker": "",
+        "algorithm": "",
+        "commission": "",
+        "stake": "",
+        "sma": "",
+        "ema": ""
     }
     try:
         test = BacktradeTest(**data)
