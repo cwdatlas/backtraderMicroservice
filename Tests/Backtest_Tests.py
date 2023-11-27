@@ -17,8 +17,11 @@ Any test with crazy in the name has as wrong of data as possible given to the re
 """
 
 
-# Expected operation, containing data that should be valid
 def test_backtrade_expected():
+    """
+    Expected input data which should result in valid operation
+    Nothing weird, all valid input data
+    """
     data = {
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
@@ -30,19 +33,24 @@ def test_backtrade_expected():
         "ema": "10"
     }
     try:
+        # checking validation
         test = BacktradeTest(**data)
-    except ValidationError as e:
+    except ValidationError as e:  #raising error if invalid
         test = None
-        assert e  # after this point is the actual test, what is before is assumed to work
+        assert e
     trader = Trader()
     results = trader.backtest(test)
+    #values we should see out of the operation
     assert results.sma == 10
     assert results.ema == 10
     assert results.ending_value > 0
 
 
-# Expected operation specifically with the EmaEmaCross algorithm, containing data that should be valid
 def test_backtrade_expected_ee():
+    """
+    Expected input data which should result in valid operation
+    Specifically with the EmaEmaCross algorithm
+    """
     data = {
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
@@ -65,8 +73,11 @@ def test_backtrade_expected_ee():
     assert results.ending_value > 0
 
 
-# Expected operation specifically with the SmaSmaCross algorithm, containing data that should be valid
 def test_backtrade_expected_ss():
+    """
+    Expected input data which should result in valid operation
+    Specifically with the SmaSmaCross algorithm
+    """
     data = {
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
@@ -89,8 +100,11 @@ def test_backtrade_expected_ss():
     assert results.ending_value > 0
 
 
-# Expected operation with the lowest expected inputs, containing data that should be valid
 def test_backtrade_expected_low():
+    """
+    Expected input data which should result in valid operation
+    With the lowest valid inputs
+    """
     data = {
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
@@ -113,8 +127,11 @@ def test_backtrade_expected_low():
     assert results.ending_value == 1000
 
 
-# Expected operation with the highest expected inputs, containing data that should be valid
 def test_backtrade_expected_high():
+    """
+    Expected input data which should result in valid operation
+    With the highest valid inputs
+    """
     data = {
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
@@ -138,8 +155,11 @@ def test_backtrade_expected_high():
     assert results.ending_value > 0
 
 
-# Expected operation containing invalid same dates, containing data that should be not valid
 def test_backtrade_crappy_dates_equal():
+    """
+    Expected input data which should result in an invalid operation
+    With invalid same dates
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2009-01-01",
@@ -161,8 +181,11 @@ def test_backtrade_crappy_dates_equal():
     assert results is None
 
 
-# Expected operation containing invalid swapped dates, containing data that should be not valid
 def test_backtrade_crappy_date_oposite():
+    """
+    Expected input data which should result in an invalid operation
+    With invalid swapped dates
+    """
     data = {
         "start_date": "2022-01-01",
         "end_date": "2009-01-01",
@@ -184,8 +207,11 @@ def test_backtrade_crappy_date_oposite():
     assert results is None
 
 
-# Expected operation containing out of bounds sma, over 100, containing data that should be not valid
 def test_backtrade_crappy_sma_out_of_bounds_up():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds sma over 99
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -207,8 +233,11 @@ def test_backtrade_crappy_sma_out_of_bounds_up():
     assert results is None
 
 
-# Expected operation containing out of bounds sma, below 1, containing data that should be not valid
 def test_backtrade_crappy_sma_out_of_bounds_down():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds sma under 1
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -230,8 +259,11 @@ def test_backtrade_crappy_sma_out_of_bounds_down():
     assert results is None
 
 
-# Expected operation containing out of bounds ema, over 100, containing data that should be not valid
 def test_backtrade_crappy_ema_out_of_bounds_up():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds ema over 99
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -253,8 +285,11 @@ def test_backtrade_crappy_ema_out_of_bounds_up():
     assert results is None
 
 
-# Expected operation containing out of bounds ema, below 1, containing data that should be not valid
 def test_backtrade_crappy_ema_out_of_bounds_down():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds ema below 1
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -276,8 +311,11 @@ def test_backtrade_crappy_ema_out_of_bounds_down():
     assert results is None
 
 
-# Expected operation containing out of bounds stake, over 100, containing data that should be not valid
 def test_backtrade_crappy_stake_out_of_bounds_up():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds stake over 100
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -299,8 +337,11 @@ def test_backtrade_crappy_stake_out_of_bounds_up():
     assert results is None
 
 
-# Expected operation containing out of bounds stake, below 0, containing data that should be not valid
 def test_backtrade_crappy_stake_out_of_bounds_down():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds stake below 0
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -322,8 +363,11 @@ def test_backtrade_crappy_stake_out_of_bounds_down():
     assert results is None
 
 
-# Expected operation containing out of bounds commission, over 1, containing data that should be not valid
 def test_backtrade_crappy_commission_out_of_bounds_up():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds commission over 1
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -345,8 +389,11 @@ def test_backtrade_crappy_commission_out_of_bounds_up():
     assert results is None
 
 
-# Expected operation containing out of bounds commission, below 0, containing data that should be not valid
 def test_backtrade_crappy_commission_out_of_bounds_down():
+    """
+    Expected input data which should result in an invalid operation
+    Containing out of bounds commission below 0
+    """
     data = {
         "start_date": "2009-01-01",
         "end_date": "2010-01-01",
@@ -368,8 +415,11 @@ def test_backtrade_crappy_commission_out_of_bounds_down():
     assert results is None
 
 
-# Expected operation containing invalid dates, containing data that should be not valid
 def test_backtrade_crazy_dates():
+    """
+    Expected input data which should result in an invalid operation
+    Containing invalid dates (these aren't dates)
+    """
     data = {
         "start_date": "ajsfk;dhhhhhhhhhaskdjf",
         "end_date": "akskjndc;asojnrva;skjdn",
@@ -391,8 +441,11 @@ def test_backtrade_crazy_dates():
     assert results is None
 
 
-# Expected operation containing None for all values and incorrect json, containing data that should be not valid
 def test_backtrade_crazy_none():
+    """
+    Expected input data which should result in an invalid operation
+    Containing None for every field
+    """
     data = {
         "start_date": "None",
         "end_date": "None",
@@ -414,8 +467,11 @@ def test_backtrade_crazy_none():
     assert results is None
 
 
-# Expected operation containing empty strings for all values, containing data that should be not valid
 def test_backtrade_crazy_blank():
+    """
+    Expected input data which should result in an invalid operation
+    Containing blank strings for every field and incorrect json args
+    """
     data = {
         "start_date": "",
         "end_date": "",
@@ -431,16 +487,19 @@ def test_backtrade_crazy_blank():
     try:
         test = BacktradeTest(**data)
     except ValidationError as e:
+        # this is expected behavior
         test = None
     assert test is None
-    # after this point is the actual test, what is before is assumed to work
     trader = Trader()
     results = trader.backtest(test)
     assert results is None
 
 
-# Expected operation containing empty strings for all values with incorrect json, containing data that should be not valid
 def test_backtrade_crazy_incorrect_json():
+    """
+    Expected input data which should result in an invalid operation
+    Containing blank strings for every field
+    """
     data = {
         "start_date": "",
         "end_date": "",

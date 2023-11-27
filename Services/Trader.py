@@ -15,12 +15,25 @@ from models.TestReturn import TestReturn
 
 
 class Trader:
+    """
+    Trader contains the functions that set up trades like optimization and backtrade
+    """
     def __init__(self):
-        self.initial_capital = 1000
+        self.initial_capital = 1000  # Default initial capitol, makes growth easy to see
+        # TODO impliment percentage return
 
-    def optimize_trade(self, params: BacktradeOptimize):
+    def optimize_trade(self, params: BacktradeOptimize) -> TestReturn:
+        """
+        optimize_trade takes params and finds the optimal trading strategy with past stock data based on param guidelines
+        :param
+            params: BacktradeOptimize
+        :return:
+            TestReturn: generic return format for test results
+        """
+        #allows for flexibility when testing
         if params is None:
             return None
+
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
@@ -31,7 +44,7 @@ class Trader:
             sma=range(params.start_sma, params.end_sma),
             ema=range(params.start_ema, params.end_ema))
 
-        # Add data feed (replace with your data)
+        # Add data feed
         modpath = os.path.dirname(os.path.abspath(sys.prefix))
         datapath = os.path.join(modpath, 'PriceHistory/UEC.csv')
         print('Absolute path found by os.path.abspath: %.2f' + datapath)
@@ -59,10 +72,21 @@ class Trader:
                 highest_g = i[0].analyzers[0].ending_value
                 sma = i[0].params.sma
                 ema = i[0].params.ema
-        trade_results = TestReturn(**{"sma": sma, "ema": ema, "ending_value": round(highest_g, 2)})
+        # initialising TestReturn
+        trade_results = TestReturn(**{"sma": sma,
+                                      "ema": ema,
+                                      "ending_value": round(highest_g, 2)})
         return trade_results
 
     def backtest(self, params: BacktradeTest):
+        """
+        backtest takes params and finds trades with the set guidelines
+        :param
+            params: BacktradeTest
+        :return:
+            TestReturn: generic return format for test results
+        """
+        #allows for flexibility when testing
         if params is None:
             return None
         # Initialize Backtrader
@@ -79,7 +103,7 @@ class Trader:
         # Add Analyzer to cerebro
         cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
 
-        # Add data feed (replace with your data)
+        # Add data feed
         modpath = os.path.dirname(os.path.abspath(sys.prefix))
         datapath = os.path.join(modpath, 'PriceHistory/UEC.csv')
         print('Absolute path found by os.path.abspath: %.2f' + datapath)
@@ -96,6 +120,8 @@ class Trader:
 
         # Run Backtest
         results = cerebro.run()
-        trade_results = TestReturn(**{"sma": results[0].params.sma, "ema": results[0].params.ema,
+        # initialising TestReturn
+        trade_results = TestReturn(**{"sma": results[0].params.sma,
+                                      "ema": results[0].params.ema,
                                       "ending_value": round(results[0].analyzers[0].ending_value, 2)})
         return trade_results

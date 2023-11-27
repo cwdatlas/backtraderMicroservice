@@ -6,8 +6,15 @@ from __future__ import (absolute_import, division, print_function,
 import backtrader as bt
 
 
-# Create a Stratey
 class EmaSmaCross(bt.Strategy):
+    """
+    Backtrade Strategy used in the cerebro.
+    Vast majority of code is from the Backtrade getting started documentation.
+    https://www.backtrader.com/docu/quickstart/quickstart/
+
+    EmaSmaCross buys and sells when ema and ama cross
+    This is the best and most realistic trading stately present, I have used this when I started trading
+    """
     params = (
         ('sma', 30),
         ('ema', 15),

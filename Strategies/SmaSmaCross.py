@@ -8,6 +8,13 @@ import backtrader as bt
 
 # Create a Stratey
 class SmaSmaCross(bt.Strategy):
+    """
+    Backtrade Strategy used in the cerebro.
+    Vast majority of code is from the Backtrade getting started documentation.
+    https://www.backtrader.com/docu/quickstart/quickstart/
+
+    SmaSmaCross buys when two smas cross each other.
+    """
     params = (
         ('sma', 30),
         ('ema', 15),
