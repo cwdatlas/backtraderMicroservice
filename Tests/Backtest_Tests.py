@@ -35,12 +35,12 @@ def test_backtrade_expected():
     try:
         # checking validation
         test = BacktradeTest(**data)
-    except ValidationError as e:  #raising error if invalid
+    except ValidationError as e:  # raising error if invalid
         test = None
         assert e
     trader = Trader()
     results = trader.backtest(test)
-    #values we should see out of the operation
+    # values we should see out of the operation
     assert results.sma == 10
     assert results.ema == 10
     assert results.ending_value > 0
@@ -136,6 +136,145 @@ def test_backtrade_expected_high():
         "start_date": "2010-01-01",
         "end_date": "2010-02-01",
         "stock_ticker": "UEC",
+        "algorithm": "EmaSmaCross",
+        "commission": "1",
+        "stake": "100",
+        "sma": "100",
+        "ema": "100"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except ValidationError as e:
+        test = None
+        assert e
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results.sma == 100
+    assert results.ema == 100
+    assert results.ending_value > 0
+
+
+def test_backtrade_expected_cmg():
+    """
+    Expected input data which should result in valid operation
+    With cmg stock ticker
+    """
+    data = {
+        "start_date": "2010-01-01",
+        "end_date": "2010-02-01",
+        "stock_ticker": "CMG",
+        "algorithm": "EmaSmaCross",
+        "commission": "1",
+        "stake": "100",
+        "sma": "100",
+        "ema": "100"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except ValidationError as e:
+        test = None
+        assert e
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results.sma == 100
+    assert results.ema == 100
+    assert results.ending_value > 0
+
+    def test_backtrade_expected_crm():
+        """
+        Expected input data which should result in valid operation
+        With crm stock ticker
+        """
+        data = {
+            "start_date": "2010-01-01",
+            "end_date": "2010-02-01",
+            "stock_ticker": "CRM",
+            "algorithm": "EmaSmaCross",
+            "commission": "1",
+            "stake": "100",
+            "sma": "100",
+            "ema": "100"
+        }
+        try:
+            test = BacktradeTest(**data)
+        except ValidationError as e:
+            test = None
+            assert e
+        # after this point is the actual test, what is before is assumed to work
+        trader = Trader()
+        results = trader.backtest(test)
+        assert results.sma == 100
+        assert results.ema == 100
+        assert results.ending_value > 0
+
+
+def test_backtrade_expected_eog():
+    """
+    Expected input data which should result in valid operation
+    With eog stock ticker
+    """
+    data = {
+        "start_date": "2010-01-01",
+        "end_date": "2010-02-01",
+        "stock_ticker": "EOG",
+        "algorithm": "EmaSmaCross",
+        "commission": "1",
+        "stake": "100",
+        "sma": "100",
+        "ema": "100"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except ValidationError as e:
+        test = None
+        assert e
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results.sma == 100
+    assert results.ema == 100
+    assert results.ending_value > 0
+
+
+def test_backtrade_expected_regn():
+    """
+    Expected input data which should result in valid operation
+    With reng stock ticker
+    """
+    data = {
+        "start_date": "2010-01-01",
+        "end_date": "2010-02-01",
+        "stock_ticker": "REGN",
+        "algorithm": "EmaSmaCross",
+        "commission": "1",
+        "stake": "100",
+        "sma": "100",
+        "ema": "100"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except ValidationError as e:
+        test = None
+        assert e
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results.sma == 100
+    assert results.ema == 100
+    assert results.ending_value > 0
+
+
+def test_backtrade_expected_SCHW():
+    """
+    Expected input data which should result in valid operation
+    With schw stock ticker
+    """
+    data = {
+        "start_date": "2010-01-01",
+        "end_date": "2010-02-01",
+        "stock_ticker": "SCHW",
         "algorithm": "EmaSmaCross",
         "commission": "1",
         "stake": "100",
@@ -415,6 +554,32 @@ def test_backtrade_crappy_commission_out_of_bounds_down():
     assert results is None
 
 
+def test_backtrade_crappy_invalid_stock_ticker():
+    """
+    Expected input data which should result in an invalid operation
+    Containing stock ticker that is not present in PriceHistory directory
+    """
+    data = {
+        "start_date": "2009-01-01",
+        "end_date": "2010-01-01",
+        "stock_ticker": "APPL",  # invalid because it is not in the stored stock tickers
+        "algorithm": "SmaSmaCross",
+        "commission": "1",
+        "stake": "1",
+        "sma": "10",
+        "ema": "10"
+    }
+    try:
+        test = BacktradeTest(**data)
+    except BacktradeInputErrors as e:
+        test = None
+    assert test is None
+    # after this point is the actual test, what is before is assumed to work
+    trader = Trader()
+    results = trader.backtest(test)
+    assert results is None
+
+
 def test_backtrade_crazy_dates():
     """
     Expected input data which should result in an invalid operation
@@ -519,3 +684,4 @@ def test_backtrade_crazy_incorrect_json():
     trader = Trader()
     results = trader.backtest(test)
     assert results is None
+
