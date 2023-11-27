@@ -95,7 +95,6 @@ class EmaSmaCross(bt.Strategy):
 
             # Not yet ... we MIGHT BUY if ...
             if self.ema[0] > self.sma[0]:
-
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
 

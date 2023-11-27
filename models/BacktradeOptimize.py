@@ -29,7 +29,7 @@ class BacktradeOptimize(BacktradeData):
         end_ema = self.end_ema
 
         # validate values (must use basic if statements so errors can be understood easily)
-        #start sma and ema validation
+        # start sma and ema validation
         if start_sma <= 0:
             raise MetricOutOfBoundsError('Starting SMA is 0 or lower', '[start_sma]')
         if start_ema <= 0:
@@ -39,7 +39,7 @@ class BacktradeOptimize(BacktradeData):
         if start_ema > 100:
             raise MetricOutOfBoundsError('Starting EMA must be less than 101', '[start_ema]')
 
-        #end sma and ema validation
+        # end sma and ema validation
         if end_sma <= 0:
             raise MetricOutOfBoundsError('Ending SMA is 0 or lower', '[end_sma]')
         if end_ema <= 0:
@@ -49,7 +49,7 @@ class BacktradeOptimize(BacktradeData):
         if end_ema > 100:
             raise MetricOutOfBoundsError('Ending EMA must be less than 100', '[end_ema]')
 
-        #validation making sure that starting is before ending
+        # validation making sure that starting is before ending
         if start_sma >= end_sma:
             raise MetricOutOfBoundsError('Starting SMA is larger or equal to ending SMA', '[start_sma, end_sma]')
         if start_ema >= end_ema:

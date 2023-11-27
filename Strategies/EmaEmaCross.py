@@ -41,7 +41,7 @@ class EmaEmaCross(bt.Strategy):
             self.datas[0], period=self.params.ema)
         # Add a MovingAverageSimple indicator
         self.ema_trailing = bt.indicators.ExponentialMovingAverage(
-            self.datas[0], period=int(self.params.ema*.4))
+            self.datas[0], period=int(self.params.ema * .4))
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -94,7 +94,6 @@ class EmaEmaCross(bt.Strategy):
 
             # Not yet ... we MIGHT BUY if ...
             if self.ema_trailing[0] > self.ema[0]:
-
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
 

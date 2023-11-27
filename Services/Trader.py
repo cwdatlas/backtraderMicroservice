@@ -11,8 +11,6 @@ import backtrader as bt
 
 import Strategies
 from Analyzers.EndingValueAnalyzer import EndingValueAnalyzer as EndValueA
-from Errors.AlgorithmNotFoundError import AlgorithmNotFoundError
-from Errors.TickerNotFoundError import TickerNotFoundError
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
 from models.TestReturn import TestReturn

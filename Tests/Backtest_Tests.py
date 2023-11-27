@@ -684,4 +684,3 @@ def test_backtrade_crazy_incorrect_json():
     trader = Trader()
     results = trader.backtest(test)
     assert results is None
-

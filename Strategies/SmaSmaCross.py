@@ -42,7 +42,7 @@ class SmaSmaCross(bt.Strategy):
             self.datas[0], period=self.params.sma)
         # Add a MovingAverageSimple indicator
         self.sma_trailing = bt.indicators.MovingAverageSimple(
-            self.datas[0], period=int(self.params.sma*.4))
+            self.datas[0], period=int(self.params.sma * .4))
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -95,7 +95,6 @@ class SmaSmaCross(bt.Strategy):
 
             # Not yet ... we MIGHT BUY if ...
             if self.sma_trailing[0] > self.sma[0]:
-
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
 

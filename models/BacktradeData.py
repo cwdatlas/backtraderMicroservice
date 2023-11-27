@@ -46,7 +46,7 @@ class BacktradeData(BaseModel):
         alg_path = Path(os.path.join(modpath, f'Strategies/{algorithm}.py'))
         ticker_path = Path(os.path.join(modpath, f'PriceHistory/{stock_ticker}.csv'))
 
-        #validate values (must use basic if statements so errors can be understood easily)
+        # validate values (must use basic if statements so errors can be understood easily)
         if start == end:
             raise DateInvalidError('dates are equal to each other, start date must be before end date',
                                    '[start_date, end_date]')
@@ -70,7 +70,3 @@ class BacktradeData(BaseModel):
         if ticker_path.exists() is False:
             raise AlgorithmNotFoundError("Input Ticker was not found in internal database", '[stock_ticker]')
         return self
-
-
-
-

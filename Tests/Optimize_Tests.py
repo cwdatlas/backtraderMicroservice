@@ -152,6 +152,7 @@ def test_optimize_expected_high():
     results = trader.optimize_trade(test)
     assert results.ending_value > 0
 
+
 def test_backtrade_expected_cmg():
     """
     Expected input data which should result in valid operation
@@ -190,11 +191,12 @@ def test_backtrade_expected_cmg():
             "algorithm": "EmaSmaCross",
             "commission": "1",
             "stake": "100",
-        "start_sma": "95",
-        "end_sma": "100",
-        "start_ema": "95",
-        "end_ema": "100"
-    }
+            "start_sma": "95",
+            "end_sma": "100",
+            "start_ema": "95",
+            "end_ema": "100"
+        }
+
     try:
         test = BacktradeOptimize(**data)
     except BacktradeInputErrors as e:
@@ -565,6 +567,7 @@ def test_optimize_crappy_commission_out_of_bounds_down():
     trader = Trader()
     results = trader.backtest(test)
     assert results is None
+
 
 def test_optimize_crappy_invalid_stock_ticker():
     """

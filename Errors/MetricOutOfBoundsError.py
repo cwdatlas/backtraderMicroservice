@@ -7,4 +7,3 @@ class MetricOutOfBoundsError(BacktradeInputErrors):
     Child of BacktradeInputErrors
     """
     pass
-
