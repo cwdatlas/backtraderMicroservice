@@ -44,12 +44,8 @@ class Trader:
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
-        try:
-            # check if strategy is found
-            strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
-        except Exception as e:
-            logger.error(e)
-            raise AlgorithmNotFoundError("Algorithm could not be found", '[algorithm]')
+        # check if strategy is found
+        strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
         cerebro.optstrategy(
             strategy_class,
             sma=range(params.start_sma, params.end_sma),
@@ -59,9 +55,6 @@ class Trader:
         modpath = os.path.dirname(os.path.abspath(sys.prefix))
         datapath = os.path.join(modpath, f'PriceHistory/{params.stock_ticker}.csv')
         file_path = Path(datapath)
-        # Checking if ticker exists
-        if file_path.exists() is False:
-            raise TickerNotFoundError("Input Ticker was not found in internal database", '[stock_ticker]')
 
         data = bt.feeds.YahooFinanceCSVData(
             dataname=datapath,
@@ -107,12 +100,8 @@ class Trader:
         # Initialize Backtrader
         cerebro = bt.Cerebro()
 
-        try:
-            # check if strategy is found
-            strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
-        except Exception as e:
-            logger.error(e)
-            raise AlgorithmNotFoundError("Algorithm could not be found", '[algorithm]')
+        strategy_class = getattr(sys.modules[Strategies.__name__], params.algorithm)
+
         # Add a strategy
         cerebro.addstrategy(
             strategy_class,
@@ -128,9 +117,6 @@ class Trader:
 
         datapath = os.path.join(modpath, f'PriceHistory/{params.stock_ticker}.csv')
         file_path = Path(datapath)
-        # Checking if ticker exists
-        if file_path.exists() is False:
-            raise TickerNotFoundError("Input Ticker was not found in internal database", '[stock_ticker]')
 
         data = bt.feeds.YahooFinanceCSVData(
             dataname=datapath,
