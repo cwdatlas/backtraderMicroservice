@@ -29,10 +29,10 @@ class BacktradeTest(BacktradeData):
         if sma > 100:
             raise MetricOutOfBoundsError('SMA needs to be less than or equal to 100',
                                          "[sma]")  # "[sma]" stated at end to allow for easy error parsing in other midas applications
-        if sma <= 1:
+        if sma < 1:
             raise MetricOutOfBoundsError('SMA  needs to more than or equal to 1', "[sma]")
         if ema > 100:
             raise MetricOutOfBoundsError('EMA needs to be less than or equal to 100', "[ema]")
-        if ema <= 1:
+        if ema < 1:
             raise MetricOutOfBoundsError('EMA ema needs to more than or equal to 1', "[ema]")
         return self
