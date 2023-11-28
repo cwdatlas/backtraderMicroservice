@@ -1,3 +1,5 @@
+from dataclasses import field
+
 from pydantic.v1.dataclasses import dataclass
 
 
@@ -9,3 +11,7 @@ class TestReturn:
     sma: int
     ema: int
     ending_value: float
+    error: str = "None"
+    message: str = "Successful Operation"
+    invalidators: list = field(default_factory=list)
+
