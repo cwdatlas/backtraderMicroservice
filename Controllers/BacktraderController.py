@@ -9,6 +9,7 @@ from Errors.BacktradeInputErrors import BacktradeInputErrors
 from Services.Trader import Trader as Trader
 from models.BacktradeOptimize import BacktradeOptimize
 from models.BacktradeTest import BacktradeTest
+from models.TestReturn import TestReturn
 
 btrader = Flask(__name__)
 logger = logging.getLogger('backtrade_logger')
@@ -74,8 +75,10 @@ def handle_bad_request(e):
         The error message, the error message
     """
     logger.exception("handle_bad_request: " + str(e.args))
-    return json.dumps(
-        {"error": "Bad Request", "message": e.args[0]}), 400  # considered user input error
+    return_data = TestReturn()
+    return_data.error = "Bad Request"
+    return_data.message = e.args[0]
+    return json.dumps(return_data.__dict__), 400  # considered user input error
 
 
 @btrader.errorhandler(BacktradeInputErrors)
@@ -90,8 +93,11 @@ def handle_backtrade_error(e):
         The error message, the error message
     """
     logger.exception("handle_backtrade_request" + str(e))
-    return json.dumps(
-        {"error": "Bad Data", "Message": str(e.args[0]), "invalidators": e.args[1]}), 400  # considered user input error
+    return_data = TestReturn()
+    return_data.error = "Bad Request"
+    return_data.message = e.args[0]
+    return_data.invalidators = e.args[1]
+    return json.dumps(return_data.__dict__), 400  # considered user input error
 
 
 @btrader.errorhandler(ValueError)
@@ -106,9 +112,10 @@ def handle_value_error(e):
         A generic error message (does not occur often)
     """
     logger.error(f"handle_value_error: '{str(e)}")
-    return json.dumps(
-        {"error": "Bad Request", "message": "Make sure all given parameters are accurate to the standard"}), 400
-    # considered user input error
+    return_data = TestReturn()
+    return_data.error = "Bad Request"
+    return_data.message = "Make sure all given parameters are accurate to the standard"
+    return json.dumps(return_data.__dict__), 400  # considered user input error
 
 
 @btrader.errorhandler(AttributeError)
@@ -123,8 +130,10 @@ def handle_attribute_error(e):
         A generic error message (does not occur often)
     """
     logger.exception("handle_attribute_error: " + str(e.args))
-    return json.dumps(
-        {"error": "Internal Error", "message": "Internal error"}), 500
+    return_data = TestReturn()
+    return_data.error = "Internal Error"
+    return_data.message = "Something went wrong on our side, site tight and we will fix it up in time"
+    return json.dumps(return_data.__dict__),500  # considered server error
 
 
 @btrader.errorhandler(TypeError)
@@ -140,8 +149,10 @@ def handle_type_error(e):
         A generic error message (does not occur often)
     """
     logger.exception("handle_type_error: " + str(e.args))
-    return json.dumps(
-        {"error": "Internal Error", "message": "Internal Error"}), 500
+    return_data = TestReturn()
+    return_data.error = "Internal Error"
+    return_data.message = "Something went wrong on our side, site tight and we will fix it up in time"
+    return json.dumps(return_data.__dict__), 500  # considered server error
 
 
 @btrader.errorhandler(Exception)
@@ -157,7 +168,10 @@ def handle_unexpected_exception(e):
         A generic error message (does not occur often)
     """
     logger.exception("handle_unexpected_exception: s" + str(e.args))
-    return json.dumps({"error": "Unexpected Error", "message": "An unexpected error occurred"}), 500
+    return_data = TestReturn()
+    return_data.error = "Unexpected Error"
+    return_data.message = "An unexpected error occurred"
+    return json.dumps(return_data.__dict__), 500  # considered server error
 
 
 @btrader.after_request

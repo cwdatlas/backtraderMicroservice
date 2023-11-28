@@ -8,10 +8,10 @@ class TestReturn:
     """
     TestReturn returns backtrade test data to the user
     """
-    sma: int
-    ema: int
-    ending_value: float
-    error: str = "None"
+    sma: int = None
+    ema: int = None
+    ending_value: float = None
+    error: str = None
     message: str = "Successful Operation"
     invalidators: list = field(default_factory=list)
 
