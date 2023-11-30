@@ -13,5 +13,5 @@ class TestReturn:
     ending_value: float = None
     error: str = None
     message: str = "Successful Operation"
-    invalidators: list = field(default_factory=list)
+    invalidators: str = None
 
