@@ -48,25 +48,23 @@ class BacktradeData(BaseModel):
 
         # validate values (must use basic if statements so errors can be understood easily)
         if start == end:
-            raise DateInvalidError('dates are equal to each other, start date must be before end date',
-                                   '[start_date, end_date]')
+            raise DateInvalidError('dates are equal to each other', 'start_date')
         if start > end:
-            raise DateInvalidError('Start date is later than end date, start date must be before end date',
-                                   '[start_date, end_date]')
+            raise DateInvalidError('Start date is later than end date', 'start_date')
         if commission > 1:
-            raise CommissionOutOfBoundsError('Commission must be less or equal to 1', '[commission]')
+            raise CommissionOutOfBoundsError('Commission must be less or equal to 1', 'commission')
         if commission < 0:
-            raise CommissionOutOfBoundsError('Commission needs to be more or equal to 0', '[commission]')
+            raise CommissionOutOfBoundsError('Commission needs to be more or equal to 0', 'commission')
         if stake > 100:
-            raise StakeOutOfBoundsError('Stake needs to be less than or equal to 100', '[stake]')
+            raise StakeOutOfBoundsError('Stake needs to be less than or equal to 100', 'stake')
         if stake < 0:
-            raise StakeOutOfBoundsError('Stake needs to be more than or equal to 0', '[stake]')
+            raise StakeOutOfBoundsError('Stake needs to be more than or equal to 0', 'stake')
 
         # algorithm validation
         if alg_path.exists() is False:
-            raise TickerNotFoundError("Algorithm could not be found", '[algorithm]')
+            raise TickerNotFoundError("Algorithm could not be found", 'algorithm')
 
         # stock ticker validation
         if ticker_path.exists() is False:
-            raise AlgorithmNotFoundError("Input Ticker was not found in internal database", '[stock_ticker]')
+            raise AlgorithmNotFoundError("Input Ticker was not found in internal database", 'stock_ticker')
         return self
