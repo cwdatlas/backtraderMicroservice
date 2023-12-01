@@ -133,7 +133,7 @@ def handle_attribute_error(e):
     return_data = TestReturn()
     return_data.error = "Internal Error"
     return_data.message = "Something went wrong on our side, site tight and we will fix it up in time"
-    return json.dumps(return_data.__dict__),500  # considered server error
+    return json.dumps(return_data.__dict__), 500  # considered server error
 
 
 @btrader.errorhandler(TypeError)

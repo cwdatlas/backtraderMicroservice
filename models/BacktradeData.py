@@ -1,6 +1,7 @@
 import os
 import sys
 from datetime import date
+import logging
 from pathlib import Path
 
 from pydantic import model_validator, BaseModel
@@ -10,6 +11,8 @@ from Errors.CommissionOutOfBoundsError import CommissionOutOfBoundsError
 from Errors.DateInvalidError import DateInvalidError
 from Errors.StakeOutOfBoundsError import StakeOutOfBoundsError
 from Errors.TickerNotFoundError import TickerNotFoundError
+
+logger = logging.getLogger('backtrade_logger')
 
 
 class BacktradeData(BaseModel):
@@ -33,6 +36,7 @@ class BacktradeData(BaseModel):
         """
         # helpful objects
         modpath = os.path.dirname(os.path.abspath(sys.prefix))
+        logger.debug(f"General path checking at '{modpath}'")
 
         # set variables
         start = self.start_date
@@ -44,7 +48,9 @@ class BacktradeData(BaseModel):
 
         # setting algorithm and stock_ticker paths
         alg_path = Path(os.path.join(modpath, f'Strategies/{algorithm}.py'))
+        logger.debug(f"Algorithm path checking at '{alg_path}'")
         ticker_path = Path(os.path.join(modpath, f'PriceHistory/{stock_ticker}.csv'))
+        logger.debug(f"Ticker time series data path checking at '{ticker_path}'")
 
         # validate values (must use basic if statements so errors can be understood easily)
         if start == end:
