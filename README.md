@@ -1,4 +1,4 @@
-![image](https://github.com/cwdatlas/backtraderMicroservice/assets/89599052/4393df8b-bb25-42e6-9898-edca3282facf)# backtraderMicroservice
+backtraderMicroservice
 This includes a microservice that is intended to be pared with the midas web app (one of my other projects). it can produce proformance data on past stock data given an algorithm (included in the app)
 
 Dependencies:
