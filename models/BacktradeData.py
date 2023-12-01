@@ -35,7 +35,11 @@ class BacktradeData(BaseModel):
             self
         """
         # helpful objects
-        modpath = os.path.dirname(os.path.abspath(sys.prefix))
+        # If DIR_HOME is specifically set as an environment variable.
+        # This is used for running the app in a container
+        modpath = os.environ.get("DIR_HOME")
+        if modpath is None:
+            modpath = os.path.dirname(os.path.abspath(sys.prefix))
         logger.debug(f"General path checking at '{modpath}'")
 
         # set variables
@@ -48,9 +52,9 @@ class BacktradeData(BaseModel):
 
         # setting algorithm and stock_ticker paths
         alg_path = Path(os.path.join(modpath, f'Strategies/{algorithm}.py'))
-        logger.debug(f"Algorithm path checking at '{alg_path}'")
+        logger.debug(f"Algorithm path set to '{alg_path}'")
         ticker_path = Path(os.path.join(modpath, f'PriceHistory/{stock_ticker}.csv'))
-        logger.debug(f"Ticker time series data path checking at '{ticker_path}'")
+        logger.debug(f"Ticker time series data path set to '{ticker_path}'")
 
         # validate values (must use basic if statements so errors can be understood easily)
         if start == end:
@@ -68,9 +72,9 @@ class BacktradeData(BaseModel):
 
         # algorithm validation
         if alg_path.exists() is False:
-            raise TickerNotFoundError("Algorithm could not be found", 'algorithm')
+            raise AlgorithmNotFoundError("Algorithm could not be found", 'algorithm')
 
         # stock ticker validation
         if ticker_path.exists() is False:
-            raise AlgorithmNotFoundError("Input Ticker was not found in internal database", 'stock_ticker')
+            raise TickerNotFoundError("Input Ticker was not found in internal database", 'stock_ticker')
         return self

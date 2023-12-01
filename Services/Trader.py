@@ -50,7 +50,11 @@ class Trader:
             ema=range(params.start_ema, params.end_ema))
 
         # Add data feed
-        modpath = os.path.dirname(os.path.abspath(sys.prefix))
+        modpath = os.environ.get("DIR_HOME")
+        if modpath is None:
+            modpath = os.path.dirname(os.path.abspath(sys.prefix))
+        logger.debug(f"General path checking at '{modpath}'")
+
         datapath = os.path.join(modpath, f'PriceHistory/{params.stock_ticker}.csv')
         file_path = Path(datapath)
 
@@ -111,7 +115,9 @@ class Trader:
         cerebro.addanalyzer(EndValueA, _name="End_Value_Analyzer")
 
         # Add data feed
-        modpath = os.path.dirname(os.path.abspath(sys.prefix))
+        modpath = os.environ.get("DIR_HOME")
+        if modpath is None:
+            modpath = os.path.dirname(os.path.abspath(sys.prefix))
 
         datapath = os.path.join(modpath, f'PriceHistory/{params.stock_ticker}.csv')
         file_path = Path(datapath)
