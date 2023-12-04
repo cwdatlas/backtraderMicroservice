@@ -4,7 +4,7 @@ from pydantic.v1.dataclasses import dataclass
 
 
 @dataclass
-class TestReturn:
+class TestReturn:# TODO rename objects to be the same on both java and python side
     """
     TestReturn returns backtrade test data to the user
     """
