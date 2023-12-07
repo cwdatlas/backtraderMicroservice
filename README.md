@@ -1,9 +1,9 @@
 backtraderMicroservice
-This includes a microservice that is intended to be pared with the midas web app: https://github.com/cwdatlas/MidasWebServer. it can produce proformance data on past stock data given an algorithm (included in the app)
+This includes a microservice that is intended to be paired with the MidasWebApp: https://github.com/cwdatlas/MidasWebServer. It can produce performance data on past stock data given an algorithm.
 
 Dependencies:
 Podman or Docker:
-download and install podman or docker. These two container engines have almost identical commands, so change the word podman to docker in my commands if you are using docker. I am using podman, so that is what I would recomend to have the best results. 
+Download and install podman or docker. These two container engines have almost identical commands, so change the word podman to docker in my commands if you are using docker. I am using podman, so that is what I would recomend to have the best results. 
 Podman:
 Official Instructions for Mac and Windows: https://podman.io/docs/installation
 
@@ -12,7 +12,7 @@ Install on MAC: https://docs.docker.com/desktop/install/mac-install/
 Windows: https://docs.docker.com/desktop/install/windows-install/
 Linux: https://docs.docker.com/desktop/install/linux-install/
 
-I recomend to use postman to send requests to the microservice. Here is an example of the body of a post to this app.
+I recommend to use postman to send requests to the microservice. Here is an example of the body of a post to this app.
 localhost:5000/optimize
 {
     "start_date": "2010-01-01",
@@ -29,7 +29,7 @@ localhost:5000/optimize
 }
 You can also use curl if you would like. 
 
-After podman or docker is installed, use the commands in your terminal after the podman engine is running(use the container engine's name that you are using in the command:
+After podman or docker is installed, use the commands in your terminal after the podman engine is running (use the container engine's name that you are using in the command):
 podman pull madatlas/midasbacktrader:1.0
 
 After you have the container, you can use this command to launch it. 
